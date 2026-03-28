@@ -6,7 +6,6 @@ export default StyleSheet.create({
     backgroundColor: "#F8F8FF",
   },
 
-  /* ── HEADER / LOGO ── */
   header: {
     backgroundColor: "#ffffff",
     paddingHorizontal: 8,
@@ -19,7 +18,6 @@ export default StyleSheet.create({
     height: 55,
   },
 
-  /* ── LAYOUT ── */
   container: {
     flex: 1,
   },
@@ -29,7 +27,6 @@ export default StyleSheet.create({
     alignItems: "center",
   },
 
-  /* ── PAGE HEADER ── */
   pageHeader: {
     alignItems: "center",
     marginBottom: 24,
@@ -50,7 +47,6 @@ export default StyleSheet.create({
     maxWidth: 300,
   },
 
-  /* ── SEARCH ── */
   searchContainer: {
     width: "100%",
     backgroundColor: "#fff",
@@ -88,7 +84,6 @@ export default StyleSheet.create({
     fontWeight: "700",
   },
 
-  /* ── RESULT CARD ── */
   resultCard: {
     width: "100%",
     backgroundColor: "#fff",
@@ -137,7 +132,6 @@ export default StyleSheet.create({
     marginBottom: 28,
   },
 
-  /* ── TIMELINE ── */
   timelineContainer: {
     paddingLeft: 0,
   },

@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { Check, Clock, FileText, Package } from "lucide-react-native";
-import styles from "../../assets/styles/trackStyles";
+import styles from "../styles/trackStyles";
 
 const statusData = [
   { id: 1, title: "Request Received",    date: "Feb 18, 2026", status: "completed" },
@@ -37,13 +37,12 @@ export default function TrackStatus({ currentUser }) {
   const [trackingId, setTrackingId] = useState("RQ-097323");
 
   const handleSearch = () => {
-    // handle search logic here
+    
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
 
-      {/* ── HEADER / LOGO ── */}
       <View style={styles.header}>
         <Image
           source={require("../../assets/images/RegQuestLogo.png")}
@@ -53,7 +52,6 @@ export default function TrackStatus({ currentUser }) {
 
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
-        {/* ── PAGE HEADER ── */}
         <View style={styles.pageHeader}>
           <Text style={styles.pageTitle}>Track Your Request</Text>
           <Text style={styles.pageSubtitle}>
@@ -61,7 +59,6 @@ export default function TrackStatus({ currentUser }) {
           </Text>
         </View>
 
-        {/* ── SEARCH BOX ── */}
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
@@ -77,10 +74,8 @@ export default function TrackStatus({ currentUser }) {
           </TouchableOpacity>
         </View>
 
-        {/* ── RESULT CARD ── */}
         <View style={styles.resultCard}>
 
-          {/* Card Header */}
           <View style={styles.resultHeader}>
             <View>
               <Text style={styles.trackIdLabel}>Tracking ID</Text>
@@ -94,20 +89,17 @@ export default function TrackStatus({ currentUser }) {
 
           <View style={styles.divider} />
 
-          {/* ── TIMELINE ── */}
           <View style={styles.timelineContainer}>
             {statusData.map((item, index) => {
               const isLast = index === statusData.length - 1;
               return (
                 <View key={item.id} style={styles.timelineStep}>
 
-                  {/* Vertical line */}
                   <View style={styles.timelineLeft}>
                     <TimelineIcon id={item.id} status={item.status} />
                     {!isLast && <View style={styles.timelineLine} />}
                   </View>
 
-                  {/* Content */}
                   <View style={styles.timelineContent}>
                     <Text style={styles.timelineTitle}>{item.title}</Text>
                     <Text style={styles.timelineDesc}>{item.date}</Text>

@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Asynchronous Native Session Persistence
     useEffect(() => {
         const loadStoredUser = async () => {
             try {
@@ -49,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         await AsyncStorage.removeItem('jwt_token');
         await AsyncStorage.removeItem('user');
         setUser(null);
-        router.replace('/login');
+        router.replace('/auth/login');
     };
 
     const value = {

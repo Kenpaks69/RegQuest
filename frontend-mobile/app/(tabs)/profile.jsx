@@ -7,7 +7,8 @@ import {
   SafeAreaView,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import styles from "../../assets/styles/profileStyles";
+import styles from "../styles/profileStyles";
+import { useAuth } from "../../context/AuthContext";
 
 const USER = {
   name: "Juan De Letchi",
@@ -48,12 +49,12 @@ const SETTINGS = [
 
 export default function Profile() {
   const [showPersonalInfo, setShowPersonalInfo] = useState(false);
+  const { logout } = useAuth();
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
-        {/* AVATAR + USER INFO */}
         <View style={styles.profileHeader}>
           <View style={styles.avatarWrapper}>
             <Icon name="user" size={56} color="#9ca3af" />
@@ -70,12 +71,10 @@ export default function Profile() {
 
         <View style={styles.dividerLine} />
 
-        {/* PERSONAL INFORMATION (expanded) */}
         {showPersonalInfo && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Personal Information</Text>
 
-            {/* Row 1: Last Name, First Name, M.I., Ext. */}
             <View style={styles.formRow}>
               <View style={[styles.formGroup, { flex: 2 }]}>
                 <Text style={styles.formLabel}>Last Name</Text>
@@ -103,7 +102,6 @@ export default function Profile() {
               </View>
             </View>
 
-            {/* Row 2: Gender, DOB/Age, Place of Birth */}
             <View style={styles.formRow}>
               <View style={[styles.formGroup, { flex: 1 }]}>
                 <Text style={styles.formLabel}>Gender</Text>
@@ -128,7 +126,6 @@ export default function Profile() {
               </View>
             </View>
 
-            {/* Row 3: Email, Contact */}
             <View style={styles.formRow}>
               <View style={[styles.formGroup, { flex: 1 }]}>
                 <Text style={styles.formLabel}>Email</Text>
@@ -144,7 +141,6 @@ export default function Profile() {
               </View>
             </View>
 
-            {/* Address */}
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Address (House #/Block/Street/Subdivision/Building)</Text>
               <View style={styles.formInput}>
@@ -152,7 +148,6 @@ export default function Profile() {
               </View>
             </View>
 
-            {/* Row 4: Province, Municipality, Barangay, Zip */}
             <View style={styles.formRow}>
               <View style={[styles.formGroup, { flex: 1.2 }]}>
                 <Text style={styles.formLabel}>Province / Region</Text>
@@ -184,7 +179,6 @@ export default function Profile() {
           </View>
         )}
 
-        {/* MY DOCUMENT REQUESTS */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>My Document Requests</Text>
           {DOCUMENT_REQUESTS.map((doc) => (
@@ -202,7 +196,6 @@ export default function Profile() {
 
         <View style={styles.dividerLine} />
 
-        {/* SETTINGS */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Settings</Text>
           {SETTINGS.map((item) => (
@@ -214,8 +207,7 @@ export default function Profile() {
           ))}
         </View>
 
-        {/* LOGOUT */}
-        <TouchableOpacity style={styles.logoutBtn}>
+        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
           <Icon name="log-out" size={18} color="#ef4444" />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>

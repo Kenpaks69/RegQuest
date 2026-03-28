@@ -14,7 +14,6 @@ export default StyleSheet.create({
     paddingBottom: 120,
   },
 
-  /* PROFILE HEADER */
   profileHeader: {
     alignItems: "center",
     paddingTop: 60,
@@ -58,13 +57,11 @@ export default StyleSheet.create({
     fontWeight: "600",
   },
 
-  /* DIVIDER */
   dividerLine: {
     height: 8,
     backgroundColor: "#f0f4fb",
   },
 
-  /* SECTIONS */
   section: {
     backgroundColor: "#fff",
     paddingHorizontal: 20,
@@ -78,7 +75,6 @@ export default StyleSheet.create({
     marginBottom: 14,
   },
 
-  /* PERSONAL INFO FORM */
   formRow: {
     flexDirection: "row",
     gap: 8,
@@ -130,7 +126,6 @@ export default StyleSheet.create({
     color: "#00007F",
   },
 
-  /* DOCUMENT CARD */
   docCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -178,7 +173,6 @@ export default StyleSheet.create({
     color: "#B45309",
   },
 
-  /* SETTINGS */
   settingItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -198,7 +192,6 @@ export default StyleSheet.create({
     fontWeight: "500",
   },
 
-  /* LOGOUT */
   logoutBtn: {
     flexDirection: "row",
     alignItems: "center",

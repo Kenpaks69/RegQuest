@@ -10,7 +10,9 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Check, ChevronLeft, ChevronRight, CheckCircle } from "lucide-react-native";
-import styles from "../../assets/styles/requestStyles";
+import styles from "../styles/requestStyles";
+import Card from "../components/Card";
+import Button from "../components/Button";
 
 const DOCUMENTS = [
   { id: 1, name: "Transcript of Records (TOR)", description: "Official academic record", price: 125, isPerPg: true },
@@ -62,7 +64,6 @@ export default function RequestDocument({ currentUser }) {
   return (
     <SafeAreaView style={styles.safeArea}>
 
-      {/* ── HEADER / LOGO ── */}
       <View style={styles.header}>
         <Image
           source={require("../../assets/images/RegQuestLogo.png")}
@@ -70,7 +71,6 @@ export default function RequestDocument({ currentUser }) {
         />
       </View>
 
-      {/* ── TAB STEPPER ── */}
       <View style={styles.stepperContainer}>
         {STEPS.map((label, i) => {
           const stepNum = i + 1;
@@ -86,7 +86,7 @@ export default function RequestDocument({ currentUser }) {
                 {label}
               </Text>
               <View style={styles.stepLineTrack}>
-                {/* Yellow fills this tab if active OR already passed */}
+                
                 {(isActive || isPast) && <View style={styles.stepLineFillActive} />}
               </View>
             </View>
@@ -96,9 +96,8 @@ export default function RequestDocument({ currentUser }) {
 
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
-        {/* ═══════════════ STEP 1 — SELECT DOCUMENT ═══════════════ */}
         {currentStep === 1 && (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <Text style={styles.cardTitle}>Select Document</Text>
 
             {DOCUMENTS.map((doc) => {
@@ -156,25 +155,24 @@ export default function RequestDocument({ currentUser }) {
             </View>
 
             <View style={styles.actionRow}>
-              <TouchableOpacity style={styles.btnBack} onPress={() => router.back()}>
+              <Button style={styles.btnBack} textStyle={styles.btnBackText} onPress={() => router.back()}>
                 <ChevronLeft size={16} color="#374151" />
                 <Text style={styles.btnBackText}>Back</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btnNext} onPress={handleNext}>
+              </Button>
+              <Button style={styles.btnNext} textStyle={styles.btnNextText} onPress={handleNext}>
                 <Text style={styles.btnNextText}>Next Step</Text>
                 <ChevronRight size={16} color="#ffffff" />
-              </TouchableOpacity>
+              </Button>
             </View>
-          </View> 
+          </Card> 
         )}
 
-        {/* ═══════════════ STEP 2 — REVIEW DATA ═══════════════ */}
         {currentStep === 2 && (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <Text style={styles.cardTitle}>Review Data</Text>
 
             <View style={styles.reviewBox}>
-              {/* Document Request */}
+              
               <View style={styles.reviewSection}>
                 <Text style={styles.sectionSubtitle}>Document Request:</Text>
                 <View style={styles.divider} />
@@ -192,7 +190,6 @@ export default function RequestDocument({ currentUser }) {
                 )}
               </View>
 
-              {/* Personal Data */}
               <View style={styles.reviewSection}>
                 <Text style={styles.sectionSubtitle}>Personal Data:</Text>
                 <View style={styles.divider} />
@@ -230,7 +227,6 @@ export default function RequestDocument({ currentUser }) {
                 </View>
               </View>
 
-              {/* Purpose */}
               <View style={[styles.reviewSection, { marginBottom: 0 }]}>
                 <Text style={styles.sectionSubtitle}>Purpose of Request:</Text>
                 <View style={styles.divider} />
@@ -249,21 +245,20 @@ export default function RequestDocument({ currentUser }) {
             </Text>
 
             <View style={styles.actionRow}>
-              <TouchableOpacity style={styles.btnBack} onPress={handleBack}>
+              <Button style={styles.btnBack} textStyle={styles.btnBackText} onPress={handleBack}>
                 <ChevronLeft size={16} color="#374151" />
                 <Text style={styles.btnBackText}>Back</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btnNext} onPress={handleNext}>
+              </Button>
+              <Button style={styles.btnNext} textStyle={styles.btnNextText} onPress={handleNext}>
                 <Text style={styles.btnNextText}>Next Step</Text>
                 <ChevronRight size={16} color="#ffffff" />
-              </TouchableOpacity>
+              </Button>
             </View>
-          </View>
+          </Card>
         )}
 
-        {/* ═══════════════ STEP 3 — PAYMENT ═══════════════ */}
         {currentStep === 3 && (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <Text style={styles.cardTitle}>Payment</Text>
 
             <View style={styles.reviewBox}>
@@ -293,7 +288,6 @@ export default function RequestDocument({ currentUser }) {
 
             <Text style={styles.paymentMethodTitle}>Select Payment Method</Text>
 
-            {/* Radio-style payment methods matching screenshot */}
             {[
               { key: "Maya",  label: "Maya",  icon: "💳" },
               { key: "GCash", label: "GCash", icon: "💙" },
@@ -319,20 +313,17 @@ export default function RequestDocument({ currentUser }) {
             ))}
 
             <View style={[styles.actionRow, { marginTop: 24 }]}>
-              <TouchableOpacity style={styles.btnBack} onPress={handleBack}>
+              <Button style={styles.btnBack} textStyle={styles.btnBackText} onPress={handleBack}>
                 <ChevronLeft size={16} color="#374151" />
                 <Text style={styles.btnBackText}>Back</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btnNext} onPress={handleNext}>
-                <Text style={styles.btnNextText}>Pay & Submit</Text>
-              </TouchableOpacity>
+              </Button>
+              <Button style={styles.btnNext} textStyle={styles.btnNextText} onPress={handleNext} title="Pay & Submit" />
             </View>
-          </View>
+          </Card>
         )}
 
-        {/* ═══════════════ STEP 4 — COMPLETE ═══════════════ */}
         {currentStep === 4 && (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <View style={styles.completeContainer}>
               <View style={styles.successIconContainer}>
                 <CheckCircle size={56} color="#fff" />
@@ -346,15 +337,11 @@ export default function RequestDocument({ currentUser }) {
                 <Text style={styles.trackingId}>RQ-097323</Text>
               </View>
               <View style={styles.completeActions}>
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => router.push("/(tabs)/track")}>
-                  <Text style={styles.btnSubmitText}>Track Status</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnHome} onPress={() => router.push("/(tabs)/home")}>
-                  <Text style={styles.btnHomeText}>Back to Home</Text>
-                </TouchableOpacity>
+                <Button style={styles.btnSubmit} textStyle={styles.btnSubmitText} onPress={() => router.push("/(tabs)/track")} title="Track Status" />
+                <Button style={styles.btnHome} textStyle={styles.btnHomeText} onPress={() => router.push("/(tabs)/home")} title="Back to Home" />
               </View>
             </View>
-          </View>
+          </Card>
         )}
 
       </ScrollView>

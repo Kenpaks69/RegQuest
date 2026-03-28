@@ -15,7 +15,6 @@ export default StyleSheet.create({
     paddingBottom: 120,
   },
 
-  /* HEADER */
   header: {
     backgroundColor: "#fff",
     paddingHorizontal: 20,
@@ -69,7 +68,6 @@ export default StyleSheet.create({
     color: "#ef4444",
   },
 
-  /* LIST */
   list: {
     gap: 12,
   },
@@ -81,7 +79,6 @@ export default StyleSheet.create({
     marginTop: 40,
   },
 
-  /* NOTIFICATION CARD */
   notifCard: {
     backgroundColor: "#fff",
     borderRadius: 12,

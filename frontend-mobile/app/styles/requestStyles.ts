@@ -6,7 +6,6 @@ export default StyleSheet.create({
     backgroundColor: "#f0f2f5",
   },
 
-  /* ── HEADER / LOGO ── */
   header: {
     backgroundColor: "#fff",
     paddingHorizontal: 16,
@@ -19,7 +18,6 @@ export default StyleSheet.create({
     height: 55,
   },
 
-  /* ── STEPPER ── */
   stepperContainer: {
     flexDirection: "row",
     backgroundColor: "#f0f2f5",
@@ -64,7 +62,6 @@ export default StyleSheet.create({
     borderRadius: 0,
   },
 
-  /* ── LAYOUT ── */
   container: {
     flex: 1,
   },
@@ -73,7 +70,6 @@ export default StyleSheet.create({
     paddingBottom: 120,
   },
 
-  /* ── CARD ── */
   card: {
     backgroundColor: "#fff",
     borderRadius: 16,
@@ -91,7 +87,6 @@ export default StyleSheet.create({
     marginBottom: 18,
   },
 
-  /* ── DOCUMENT ITEM ── */
   docItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -142,7 +137,6 @@ export default StyleSheet.create({
     color: "#1a1a1a",
   },
 
-  /* ── COPY COUNTER ── */
   copyRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -193,7 +187,6 @@ export default StyleSheet.create({
     color: "#1a1a1a",
   },
 
-  /* ── TOTAL ── */
   totalRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -219,7 +212,6 @@ export default StyleSheet.create({
     fontSize: 16,
   },
 
-  /* ── REVIEW BOX ── */
   reviewBox: {
     backgroundColor: "#E2E2E2",
     borderRadius: 12,
@@ -268,7 +260,6 @@ export default StyleSheet.create({
     color: "#9ca3af",
   },
 
-  /* ── FORM GRID ── */
   formGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -314,7 +305,6 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
 
-  /* ── PAYMENT ── */
   paymentTotalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -357,7 +347,6 @@ export default StyleSheet.create({
     marginBottom: 12,
   },
 
-  /* ── RADIO PAYMENT METHOD ── */
   methodRadioRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -401,7 +390,6 @@ export default StyleSheet.create({
     flex: 1,
   },
 
-  /* ── COMPLETE ── */
   completeContainer: {
     alignItems: "center",
     paddingVertical: 24,
@@ -455,7 +443,6 @@ export default StyleSheet.create({
     gap: 12,
   },
 
-  /* ── ACTIONS ── */
   actionRow: {
     flexDirection: "row",
     justifyContent: "space-between",

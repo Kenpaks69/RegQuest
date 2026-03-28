@@ -11,7 +11,11 @@ import {
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Feather";
-import styles from "../../assets/styles/homeStyles";
+import styles from "../styles/homeStyles";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import Prediction from "../components/Prediction";
+import FeatureItem from "../components/FeatureItem";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Home = ({ currentUser }) => {
@@ -34,10 +38,9 @@ const Home = ({ currentUser }) => {
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       enableOnAndroid={true}
-      extraScrollHeight={80} // ✅ prevents keyboard overlap
+      extraScrollHeight={80} 
     >
 
-      {/* NAVBAR */}
       <View style={styles.navbar}>
         <Image
           source={require("../../assets/images/RegQuestLogo.png")}
@@ -45,7 +48,6 @@ const Home = ({ currentUser }) => {
         />
       </View>
 
-      {/* HERO */}
       <View style={styles.hero}>
         <ImageBackground
           source={require("../../assets/images/USTP-CDO.jpg")}
@@ -53,7 +55,7 @@ const Home = ({ currentUser }) => {
         />
 
         <LinearGradient
-          colors={["#0B0B36", "#0B0B36", "rgba(31, 31, 156, 0.5)"]}
+          colors={["rgba(0, 0, 127, 0.9)", "rgba(0, 0, 127, 0.7)", "transparent"]}
           locations={[0, 0.50, 1]}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
@@ -72,32 +74,30 @@ const Home = ({ currentUser }) => {
           </Text>
 
           <View style={styles.heroButtons}>
-            <TouchableOpacity
+            <Button
               style={styles.heroBtnPrimary}
+              textStyle={{ fontWeight: "900", color: "#1F1F9C", fontSize: 10 }}
               onPress={() => router.push("/(tabs)/request")}
-            >
-              <Text style={{ fontWeight: "900", color: "#1F1F9C", fontSize: 10 }}>Start Request</Text>
-            </TouchableOpacity>
+              title="Start Request"
+            />
 
-            <TouchableOpacity
+            <Button
               style={styles.heroBtnOutline}
+              textStyle={{ color: "#FEC956", fontWeight: "700", fontSize: 10 }}
               onPress={() => router.push("/(tabs)/track")}
-            >
-              <Text style={{ color: "#FEC956", fontWeight: "700", fontSize: 10 }}>Track Status</Text>
-            </TouchableOpacity>
+              title="Track Status"
+            />
           </View>
         </View>
       </View>
 
-      {/* CREDENTIALS */}
       <View style={styles.credentialsSection}>
         <Text style={styles.sectionTitle}>Available Credentials</Text>
 
         <View style={styles.credentialsGrid}>
           {visibleCredentials.map((cred, index) => (
-            <View key={cred.id} style={styles.credentialCard}>
+            <Card key={cred.id} style={styles.credentialCard}>
 
-              {/* HEADER BG */}
               <View style={[
                 styles.cardHeaderBg,
                 styles[`headerColor${index + 1}`]
@@ -107,39 +107,37 @@ const Home = ({ currentUser }) => {
                 </View>
               </View>
 
-              {/* CONTENT */}
               <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{cred.title}</Text>
                 <Text style={styles.cardDesc}>{cred.description}</Text>
 
+                <Prediction label="Estimated Processing Time" result="3 to 5 Days" confidence={95} />
+
                 <View style={styles.cardFooter}>
                   <Text style={styles.priceTag}>₱ {cred.price}</Text>
 
-                  <TouchableOpacity
+                  <Button
                     style={styles.requestBtnSmall}
+                    textStyle={{ color: "#fff", fontSize: 11, fontWeight: "600" }}
                     onPress={() => router.push("/(tabs)/request")}
-                  >
-                    <Text style={{ color: "#fff", fontSize: 11, fontWeight: "600" }}>Request →</Text>
-                  </TouchableOpacity>
+                    title="Request →"
+                  />
                 </View>
               </View>
-            </View>
+            </Card>
           ))}
         </View>
 
-        {/* SEE MORE BUTTON */}
-        <TouchableOpacity
+        <Button
           style={styles.seeMoreBtn}
+          textStyle={styles.seeMoreBtnText}
           onPress={() => router.push("/(tabs)/request")}
-        >
-          <Text style={styles.seeMoreBtnText}>See More Credentials →</Text>
-        </TouchableOpacity>
+          title="See More Credentials →"
+        />
       </View>
 
-      {/* STATUS */}
-      
       <View style={styles.statusSection}>
-        <View style={styles.statusCard}>
+        <Card style={styles.statusCard}>
 
           <Text style={styles.statusTitle}>
             Check Your Request Status
@@ -156,18 +154,29 @@ const Home = ({ currentUser }) => {
               placeholderTextColor="#9ca3af"
             />
 
-            <TouchableOpacity
+            <Button
               style={styles.statusBtn}
+              textStyle={{ color: "#fff", fontWeight: "700", fontSize: 13 }}
               onPress={() => router.push("/(tabs)/track")}
-            >
-              <Text style={{ color: "#fff", fontWeight: "700", fontSize: 13 }}>
-                Track Now
-              </Text>
-            </TouchableOpacity>
+              title="Track Now"
+            />
           </View>
 
-    </View>
+    </Card>
   </View>
+
+      <View style={styles.featuresSection}>
+        <Text style={[styles.sectionTitle, { textAlign: 'center', color: '#00007F', marginBottom: 16 }]}>
+          Streamlining the Credential Process
+        </Text>
+        <Text style={{ textAlign: 'center', color: '#6b7280', marginBottom: 32, paddingHorizontal: 16, lineHeight: 22 }}>
+          Our mission is to reduce physical queues and improve turnaround time for all registrar services.
+        </Text>
+        
+        <FeatureItem icon={(props) => <Icon name="shield" {...props} />} desc="Your academic records are sensitive. We use enterprise-grade encryption to ensure your data remains private and secure." />
+        <FeatureItem icon={(props) => <Icon name="file-text" {...props} />} desc="By digitizing the application process, we've reduced processing times by up to 50%, getting your documents to you faster." />
+        <FeatureItem icon={(props) => <Icon name="user" {...props} />} desc="No more standing in long lines. Apply from home, pay online, and track your request status in real-time." />
+      </View>
 
     </KeyboardAwareScrollView>
   );

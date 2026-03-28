@@ -7,7 +7,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { Info, Check, Trash2 } from "lucide-react-native";
-import styles from "../../assets/styles/notificationStyles";
+import styles from "../styles/notificationStyles";
 
 const INITIAL_NOTIFICATIONS = [
   {
@@ -40,7 +40,6 @@ export default function Notification() {
   return (
     <SafeAreaView style={styles.safeArea}>
 
-      {/* HEADER — outside ScrollView to touch the sides */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Notification</Text>
         <Text style={styles.headerSubtitle}>
@@ -60,7 +59,6 @@ export default function Notification() {
 
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
-        {/* NOTIFICATION LIST */}
         <View style={styles.list}>
           {notifications.length === 0 && (
             <Text style={styles.emptyText}>No notifications.</Text>
