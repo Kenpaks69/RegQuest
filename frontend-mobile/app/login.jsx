@@ -11,10 +11,34 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "../assets/styles/loginStyles";
 import { useRouter } from "expo-router";
-
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  const handleLogin = async () => {
+    if (isLoggingIn) return;
+    setError("");
+    setIsLoggingIn(true);
+
+    try {
+      await login(email, password);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("Invalid email or password.");
+      }
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
   return (
     <ImageBackground
       source={require("../assets/images/USTP-CDO.jpg")}
@@ -69,6 +93,8 @@ export default function Login() {
                 placeholderTextColor="#aaa"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -85,14 +111,19 @@ export default function Login() {
                 placeholder="Enter your password..."
                 placeholderTextColor="#aaa"
                 secureTextEntry
+                value={password}
+                onChangeText={setPassword}
               />
             </View>
 
+            {error ? <Text style={{ color: 'red', textAlign: 'center', marginTop: 10, marginBottom: 5 }}>{error}</Text> : null}
+
             <TouchableOpacity 
-            style={styles.button} 
-            onPress={() => router.replace("/(tabs)/home")}
+            style={[styles.button, isLoggingIn && { opacity: 0.7 }]} 
+            onPress={handleLogin}
+            disabled={isLoggingIn}
           >
-            <Text style={styles.buttonText}>Log In</Text>
+            <Text style={styles.buttonText}>{isLoggingIn ? "Logging In..." : "Log In"}</Text>
           </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>

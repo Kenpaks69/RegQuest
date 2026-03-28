@@ -8,18 +8,21 @@ import HomePage from './pages/HomePage';
 import RequestDocument from './pages/RequestDocument';
 import TrackStatus from './pages/TrackStatus';
 import ProfilePage from './pages/ProfilePage';
-import ScrollToTop from './components/ScrollToTop';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
-const App = () => {
-  const currentUser = {
+const AppContent = () => {
+  const { user } = useAuth();
+  
+  // Safe default mockup fallback structure to preserve original non-API components
+  const currentUser = user || {
     name: "User",
     role: "Student",
-    studentId: "2023-0001",
+    studentId: "0000-0000",
     notifications: 5
   };
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LoginPage />} />
@@ -30,6 +33,16 @@ const App = () => {
         <Route path="/track-status" element={<TrackStatus currentUser={currentUser} />} />
         <Route path="/profile" element={<ProfilePage currentUser={currentUser} />} />
       </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 };

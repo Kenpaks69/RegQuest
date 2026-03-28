@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useRouter } from "expo-router";
 import styles from "../assets/styles/registerStyles";
+import api from "../api/axios";
 
 export default function Register() {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function Register() {
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const handleNextStep = () => {
     if (!fullName || !studentId || !program || !yearLevel) {
@@ -36,7 +39,7 @@ export default function Register() {
     setStep(2);
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!email || !password || !confirmPassword) {
       Alert.alert("Please fill in all fields.");
       return;
@@ -45,7 +48,32 @@ export default function Register() {
       Alert.alert("Passwords do not match.");
       return;
     }
-    setSuccess(true);
+
+    if (isRegistering) return;
+    setError("");
+    setIsRegistering(true);
+
+    try {
+      const [fname, ...lnameArr] = fullName.split(' ');
+      const lname = lnameArr.join(' ');
+      
+      await api.post('/auth/register', {
+        fname: fname || 'Unknown',
+        lname: lname || 'Unknown',
+        email,
+        password
+      });
+
+      setSuccess(true);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("An error occurred during registration.");
+      }
+    } finally {
+      setIsRegistering(false);
+    }
   };
 
   if (success) {
@@ -320,15 +348,18 @@ export default function Register() {
                   </TouchableOpacity>
                 </View>
 
+                {error ? <Text style={{ color: 'red', textAlign: 'center', marginTop: 10, marginBottom: 5 }}>{error}</Text> : null}
+
                 <View style={styles.bottomRow}>
-                  <TouchableOpacity onPress={() => setStep(1)}>
+                  <TouchableOpacity onPress={() => setStep(1)} disabled={isRegistering}>
                     <Text style={styles.backText}>Back</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.registerButton}
+                    style={[styles.registerButton, isRegistering && { opacity: 0.7 }]}
                     onPress={handleRegister}
+                    disabled={isRegistering}
                   >
-                    <Text style={styles.buttonText}>Register</Text>
+                    <Text style={styles.buttonText}>{isRegistering ? "Registering..." : "Register"}</Text>
                   </TouchableOpacity>
                 </View>
               </>

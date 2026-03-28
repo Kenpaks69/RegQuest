@@ -2,32 +2,31 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import '../styles/LoginPage.css';
-import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (isLoggingIn) return;
     setError('');
+    setIsLoggingIn(true);
 
     try {
-      const response = await api.post('/auth/login', { email, password });
-      
-      const { jwt_token, user } = response.data;
-      localStorage.setItem('jwt_token', jwt_token);
-      localStorage.setItem('user', JSON.stringify(user));
-
-      navigate('/home');
+      await login(email, password);
     } catch (err) {
-      if (err.response && err.response.data) {
+      if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
         setError('Invalid email or password.');
       }
+    } finally {
+      setIsLoggingIn(false);
     }
   }
 
@@ -100,8 +99,8 @@ const LoginPage = () => {
 
             {error && <p style={{ color: 'red', marginTop: '1rem', textAlign: 'center' }}>{error}</p>}
 
-            <button type="submit" className="login-button" onClick={handleLogin}>
-              Log In
+            <button type="submit" className="login-button" onClick={handleLogin} disabled={isLoggingIn}>
+              {isLoggingIn ? 'Logging In...' : 'Log In'}
             </button>
 
             <footer className="form-footer">
