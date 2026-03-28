@@ -1,12 +1,13 @@
-import mysql from 'mysql2/promise';
+import pkg from 'pg';
+const { Pool } = pkg;
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const migrate = async () => {
-    const pool = mysql.createPool({
+    const pool = new Pool({
         host: process.env.DB_HOST,
-        port: process.env.DB_PORT || 3306,
+        port: process.env.DB_PORT || 5432,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
@@ -15,23 +16,23 @@ const migrate = async () => {
         }
     });
 
-    console.log('Connecting to Aiven MySQL to run migrations...');
+    console.log('Connecting to PostgreSQL to run migrations...');
 
     try {
         const query = `
             CREATE TABLE IF NOT EXISTS users (
-                user_id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id SERIAL PRIMARY KEY,
                 fname VARCHAR(50) NOT NULL,
                 lname VARCHAR(50) NOT NULL,
                 email VARCHAR(100) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
-                role ENUM('user', 'admin') DEFAULT 'user',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             );
         `;
-d
-        await pool.execute(query);
-        console.log('Success! The "users" table has been created on your Aiven Database.');
+
+        await pool.query(query);
+        console.log('Success! The "users" table has been created on your PostgreSQL Database.');
 
     } catch (error) {
         console.error('Migration failed:', error.message);
