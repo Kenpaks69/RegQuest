@@ -18,6 +18,7 @@ const RequestDocument = ({ currentUser }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [trackingNumber, setTrackingNumber] = useState('');
 
     const navigate = useNavigate();
     const stepperRef = useRef(null);
@@ -131,6 +132,7 @@ const RequestDocument = ({ currentUser }) => {
                 throw new Error("Submission failed");
             }
 
+            setTrackingNumber(data.tracking_number);
             setCurrentStep(4);
 
         } catch (error) {
@@ -376,7 +378,7 @@ const RequestDocument = ({ currentUser }) => {
                             
                             <div className="tracking-box">
                                 <p className="tracking-label">Your Tracking ID</p>
-                                <h3 className="tracking-id">RQ-097323</h3>
+                                <h3 className="tracking-id">{trackingNumber || "N/A"}</h3>
                             </div>
                             
                             <div className="complete-actions">

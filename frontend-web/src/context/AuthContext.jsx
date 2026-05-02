@@ -20,12 +20,17 @@ export const AuthProvider = ({ children }) => {
                 const token = localStorage.getItem('jwt_token');
                 const storedUser = localStorage.getItem('user');
 
-                if (token && storedUser) {
+                if (token && storedUser && storedUser !== "undefined") {
                     setUser(JSON.parse(storedUser));
+                } else {
+                    setUser(null);
                 }
             } catch (error) {
                 console.error("Failed to restore session", error);
-                logout();
+                localStorage.removeItem('jwt_token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('user');
+                setUser(null);
             } finally {
                 setIsLoading(false);
             }
