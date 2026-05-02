@@ -7,37 +7,67 @@ import Button from '../components/Button';
 import Card from '../components/Card';
 import '../styles/RequestDocument.css';
 
+const API_URL = "http://127.0.0.1:8000/api/v1/documents/";
+
 const RequestDocument = ({ currentUser }) => {
-    const [documents, setDocuments] = useState([
-        { id: 1, name: 'Transcript of Records (TOR)', description: 'Official academic record', price: 125, isPerPg: true },
-        { id: 2, name: 'Honorable Dismissal', description: 'Official academic record', price: 100, isPerPg: false },
-        { id: 3, name: 'Evaluation', description: 'Official academic record', price: 50, isPerPg: false },
-        { id: 4, name: 'Authentication', description: 'Official academic record', price: 5, isPerPg: true },
-        { id: 5, name: 'CAR', description: 'Official academic record', price: 80, isPerPg: false },
-        { id: 6, name: 'GPA', description: 'Official academic record', price: 80, isPerPg: false },
-        { id: 7, name: 'Endorsement', description: 'Official academic record', price: 80, isPerPg: false },
-        { id: 8, name: 'Officially Enrolled', description: 'Official academic record', price: 80, isPerPg: false },
-        { id: 9, name: 'Earned Units', description: 'Official academic record', price: 80, isPerPg: false },
-    ]);
+    const [documents, setDocuments] = useState([]);
     const [selectedDocs, setSelectedDocs] = useState([]);
     const [currentStep, setCurrentStep] = useState(1);
     const [purpose, setPurpose] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+
     const navigate = useNavigate();
     const stepperRef = useRef(null);
 
-    // Fetch documents from backend placeholder
     useEffect(() => {
-        // const fetchDocuments = async () => {
-        //     try {
-        //         const response = await fetch('/api/documents');
-        //         const data = await response.json();
-        //         setDocuments(data);
-        //     } catch (error) {
-        //         console.error('Error fetching documents', error);
-        //     }
-        // };
-        // fetchDocuments();
+        const fetchDocuments = async () => {
+            try {
+                const response = await fetch(API_URL, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("jwt_token") || ""}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to load documents");
+                }
+
+                const data = await response.json();
+
+                const formatted = data.map(item => ({
+                    id: item.id,
+                    name: item.document_name || item.name,
+                    description: item.description || "Official academic record",
+                    price: item.price || 0,
+                    isPerPg: item.is_per_pg || false
+                }));
+
+                setDocuments(formatted);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load documents");
+
+                setDocuments([
+                    { id: 1, name: 'Transcript of Records (TOR)', description: 'Official academic record', price: 125, isPerPg: true },
+                    { id: 2, name: 'Honorable Dismissal', description: 'Official academic record', price: 100, isPerPg: false },
+                    { id: 3, name: 'Evaluation', description: 'Official academic record', price: 50, isPerPg: false },
+                    { id: 4, name: 'Authentication', description: 'Official academic record', price: 5, isPerPg: true },
+                    { id: 5, name: 'CAR', description: 'Official academic record', price: 80, isPerPg: false },
+                    { id: 6, name: 'GPA', description: 'Official academic record', price: 80, isPerPg: false },
+                    { id: 7, name: 'Endorsement', description: 'Official academic record', price: 80, isPerPg: false },
+                    { id: 8, name: 'Officially Enrolled', description: 'Official academic record', price: 80, isPerPg: false },
+                    { id: 9, name: 'Earned Units', description: 'Official academic record', price: 80, isPerPg: false },
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDocuments();
     }, []);
 
     // Auto-scroll stepper on mobile when currentStep changes
@@ -71,6 +101,44 @@ const RequestDocument = ({ currentUser }) => {
 
     const handleBack = () => {
         if (currentStep > 1) setCurrentStep(currentStep - 1);
+    };
+
+    const submitRequest = async () => {
+        try {
+            setSubmitting(true);
+
+            const token = localStorage.getItem("jwt_token");
+
+            const response = await fetch("http://127.0.0.1:8000/api/v1/requests/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    document_type: selectedDocs[0],
+                    quantity: selectedDocs.length,
+                    total_price: calculateTotal(),
+                    status: "pending",
+                    est_release_date: new Date().toISOString()
+                })
+            });
+
+            const data = await response.json();
+            console.log(data); // 👈 IMPORTANT
+
+            if (!response.ok) {
+                throw new Error("Submission failed");
+            }
+
+            setCurrentStep(4);
+
+        } catch (error) {
+            console.error(error);
+            alert("Submission failed. Check console.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -272,10 +340,10 @@ const RequestDocument = ({ currentUser }) => {
                                 PayMaya
                             </Button>
                             <Button 
-                                className={`method-btn ${paymentMethod === 'E-Wallet' ? 'selected' : ''}`}
-                                onClick={() => setPaymentMethod('E-Wallet')}
+                                className={`method-btn ${paymentMethod === 'Over-the-Counter' ? 'selected' : ''}`}
+                                onClick={() => setPaymentMethod('Over-the-Counter')}
                             >
-                                E-Wallet
+                                Over-the-Counter
                             </Button>
                         </div>
 
@@ -283,8 +351,12 @@ const RequestDocument = ({ currentUser }) => {
                             <Button className="btn-back" onClick={handleBack} style={{ fontWeight: 800, fontSize: '1.2rem', padding: '0 1rem' }}>
                                 Back
                             </Button>
-                            <Button className="btn-submit" onClick={handleNextStep}>
-                                Pay & Submit
+                            <Button 
+                                className="btn-submit" 
+                                onClick={submitRequest}
+                                disabled={submitting}
+                            >
+                                {submitting ? "Submitting..." : "Pay & Submit"}
                             </Button>
                         </div>
                     </Card>

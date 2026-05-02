@@ -34,11 +34,12 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await api.post('/auth/register', {
-        fname: firstName,
-        lname: lastName,
+      const response = await api.post('/accounts/register/', {
         email,
-        password
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        role: "student"
       });
 
       console.log('Registration successful', response.data);

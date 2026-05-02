@@ -58,7 +58,7 @@ const LoginPage = () => {
             <p className="form-subtitle">Please enter your credentials to continue</p>
           </header>
 
-          <form className="login-form">
+          <form className="login-form" onSubmit={handleLogin}>
             <div className="input-group">
               <label htmlFor="email" className="input-label">
                 Student ID / Email
@@ -99,7 +99,7 @@ const LoginPage = () => {
 
             {error && <p style={{ color: 'red', marginTop: '1rem', textAlign: 'center' }}>{error}</p>}
 
-            <button type="submit" className="login-button" onClick={handleLogin} disabled={isLoggingIn}>
+            <button type="submit" className="login-button" disabled={isLoggingIn}>
               {isLoggingIn ? 'Logging In...' : 'Log In'}
             </button>
 

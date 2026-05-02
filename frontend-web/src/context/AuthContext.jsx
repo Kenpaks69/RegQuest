@@ -35,18 +35,25 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const response = await api.post('/auth/login', { email, password });
-        
-        const { jwt_token, user: userData } = response.data;
-        localStorage.setItem('jwt_token', jwt_token);
+        const response = await api.post('/accounts/login/', {
+            email,
+            password
+        });
+
+        const { access, refresh, user: userData } = response.data;
+
+        localStorage.setItem('jwt_token', access);
+        localStorage.setItem('refresh_token', refresh);
         localStorage.setItem('user', JSON.stringify(userData));
-        
+
         setUser(userData);
+
         navigate('/home');
     };
 
     const logout = () => {
         localStorage.removeItem('jwt_token');
+        localStorage.removeItem('refresh_token');
         localStorage.removeItem('user');
         setUser(null);
         navigate('/');
