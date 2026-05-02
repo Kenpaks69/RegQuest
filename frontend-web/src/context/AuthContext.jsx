@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                 const token = localStorage.getItem('jwt_token');
                 const storedUser = localStorage.getItem('user');
 
-                if (token && storedUser) {
+                if (token && storedUser && storedUser !== "undefined") {
                     const parsed = JSON.parse(storedUser);
                     if (parsed.email && parsed.first_name === undefined && parsed.role) {
                         // Stale payload format, force logout to get new data
@@ -28,10 +28,16 @@ export const AuthProvider = ({ children }) => {
                     } else {
                         setUser(parsed);
                     }
+                } else {
+                    setUser(null);
+                }
                 }
             } catch (error) {
                 console.error("Failed to restore session", error);
-                logout();
+                localStorage.removeItem('jwt_token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('user');
+                setUser(null);
             } finally {
                 setIsLoading(false);
             }
