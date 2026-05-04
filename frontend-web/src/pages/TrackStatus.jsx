@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Check, Clock, FileText, Package } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -12,27 +13,40 @@ const TrackStatus = ({ currentUser }) => {
     const [isSearching, setIsSearching] = useState(false);
     const [requestData, setRequestData] = useState(null);
     const [error, setError] = useState('');
+    const location = useLocation();
+
+    useEffect(() => {
+        // If a tracking ID was passed through navigation state, auto-fill and search
+        if (location.state?.trackingNumber) {
+            setTrackingId(location.state.trackingNumber);
+            performSearch(location.state.trackingNumber);
+        }
+    }, [location.state]);
+
+    const performSearch = async (id) => {
+        if (!id.trim()) return;
+        
+        setIsSearching(true);
+        setError('');
+        setRequestData(null);
+        
+        try {
+            const response = await api.get(`/requests/track/${id.trim()}/`);
+            setRequestData(response.data);
+        } catch (err) {
+            if (err.response && err.response.status === 404) {
+                setError('Tracking ID not found. Please check and try again.');
+            } else {
+                setError('An error occurred while tracking. Please try again.');
+            }
+        } finally {
+            setIsSearching(false);
+        }
+    };
 
     const handleSearch = async (e) => {
         if (e.key === 'Enter' || e.type === 'click') {
-            if (!trackingId.trim()) return;
-            
-            setIsSearching(true);
-            setError('');
-            setRequestData(null);
-            
-            try {
-                const response = await api.get(`/requests/track/${trackingId.trim()}/`);
-                setRequestData(response.data);
-            } catch (err) {
-                if (err.response && err.response.status === 404) {
-                    setError('Tracking ID not found. Please check and try again.');
-                } else {
-                    setError('An error occurred while tracking. Please try again.');
-                }
-            } finally {
-                setIsSearching(false);
-            }
+            performSearch(trackingId);
         }
     };
 

@@ -21,7 +21,13 @@ export const AuthProvider = ({ children }) => {
                 const storedUser = localStorage.getItem('user');
 
                 if (token && storedUser && storedUser !== "undefined") {
-                    setUser(JSON.parse(storedUser));
+                    const parsed = JSON.parse(storedUser);
+                    if (parsed.email && parsed.first_name === undefined && parsed.role) {
+                        // Stale payload format, force logout to get new data
+                        logout();
+                    } else {
+                        setUser(parsed);
+                    }
                 } else {
                     setUser(null);
                 }
